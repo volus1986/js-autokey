@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "../../dist/front-end",
+    "noImplicitAny": true,
+    "target": "ES6",
+    "jsx": "react",
+    "allowJs": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+}

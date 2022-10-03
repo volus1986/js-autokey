@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "../../dist/back-end",
+    "noImplicitAny": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "allowJs": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+}
