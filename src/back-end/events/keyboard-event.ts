@@ -8,14 +8,16 @@ export const KeyAction = {
 }
 
 export class KeyboardEvent implements IEventHandler {
+    keyInputted: string;
+    actionInputted: string;
     keyCode: number | null;
-    action: string;
-    key: string;
+    action: string | null;
 
     constructor(key: string, action: string) {
+        this.keyInputted = key;
+        this.actionInputted = action
         // @ts-ignore
         this.keyCode = Key[key] || null;
-        this.key = key;
         // @ts-ignore
         this.action = KeyAction[action];
 
@@ -43,10 +45,18 @@ export class KeyboardEvent implements IEventHandler {
         }
     }
 
+    toString() {
+        console.log(`key event: key: ${this.keyInputted} | actionInputted: ${this.actionInputted} | keyCode: ${this.keyCode}| action: ${this.action}`)
+    }
+
     async handleIncorrectAction(): Promise<any> {
-            return setTimeout(() => {
-                console.error(`key event: key: ${this.key} | action: ${this.action} | code: ${this.keyCode}`)
-            }, 1000)
+        return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                this.toString();
+                resolve()
+            }, 0);
+        })
+
     }
 
     async handleKeyPressEvent(): Promise<any> {
