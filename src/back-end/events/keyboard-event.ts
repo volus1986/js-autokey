@@ -1,4 +1,4 @@
-import { IEventHandler } from "./i-event-handler";
+import {IEventHandler} from "./i-event-handler";
 import {Key, keyboard, KeyboardClass} from "@nut-tree/nut-js";
 
 export const KeyAction = {
@@ -59,28 +59,27 @@ export class KeyboardEvent implements IEventHandler {
         })
     }
 
-    async handleAfterClick(): Promise<any> {
+    async handleAfterClick(keyboardClass: KeyboardClass): Promise<KeyboardClass> {
         if (this.delay) {
             await new Promise(resolve => setTimeout(resolve, this.delay))
         }
 
-        return
+        return keyboardClass;
     }
 
     async handleKeyPressEvent(): Promise<KeyboardClass> {
-        const res = await keyboard.pressKey(this.keyCode);
-
-        if(this.delay) await this.handleAfterClick();
-
-        return res
+        return keyboard.pressKey(this.keyCode)
+            .then((res) => this.handleAfterClick(res));
     }
 
     async handleKeyReleaseEvent(): Promise<any> {
-        return keyboard.releaseKey(this.keyCode);
+        return keyboard.releaseKey(this.keyCode)
+            .then((res) => this.handleAfterClick(res));
     }
 
     async handleKeyTypeEvent(): Promise<any> {
-        return keyboard.type(this.keyCode);
+        return keyboard.type(this.keyCode)
+            .then((res) => this.handleAfterClick(res));
     }
 
     async handleEvent(): Promise<any> {}
