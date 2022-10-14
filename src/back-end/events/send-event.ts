@@ -16,17 +16,7 @@ class SendKeyboardEvent1 {
     constructor(browserWindow: BrowserWindow) {
         this.browserWindow = browserWindow
     }
-/*
-    sendKey(entry: KeyboardEntry, delay: number) {
-        ["keyDown", "char", "keyUp"].forEach(async(type) => {
-            entry.type = type;
-            this.browserWindow.webContents.sendInputEvent(entry);
 
-            // Delay
-            await new Promise(resolve => setTimeout(resolve, delay));
-        });
-    }
-*/
     async sendKey(entry: KeyboardEntry, delay: number) {
             this.browserWindow.webContents.sendInputEvent(entry);
 

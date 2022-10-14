@@ -21,8 +21,9 @@ class KeyboardEvents {
         if (!key) return;
 
         await this.pressKey(key)
-        await sleep(delay)
+        await sleep(30 + Math.floor(Math.random() * 20))
         await this.releaseKey(key)
+        await sleep(delay)
     }
 
     static async typeKeys(keyList: Array<Key>, delay: number = 70) {

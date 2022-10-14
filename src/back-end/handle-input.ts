@@ -1,56 +1,27 @@
-import {Key} from "@nut-tree/nut-js"
+import {parseCommandKeyString, COMMANDS} from "./events/command";
+import {EventTypes, IEvent} from "./events/i-event-handler";
 
-enum EventType {type = 'type', press = 'press', release = 'release'}
-
-interface IEvent {
-    key: Key
-    type: EventType
-    delay: number
+function getHandlerFromCommand(command: string) {
+    if (command === COMMANDS.delay) return EventTypes.delay;
+    else return EventTypes.keyboard;
 }
 
-function parseEventKey(pressedKey: string): Key {
-    if (!pressedKey.length) return null;
+function strToEvent(str: string): IEvent | null {
+    const strArr = str.trim()
+        .split(' ');
 
-    const pressedKeyLower = pressedKey.toLowerCase();
+    if(!strArr[0]) return null;
 
-    for (let key in Key) {
-        if(pressedKeyLower === key.toLowerCase()) {
-            // @ts-ignore
-            return Key[key];
-        }
-    }
-
-    console.log('noKeyFound')
-    return null
-}
-
-function parseEventType(str: string): EventType {
-    if (!str) return EventType.type;
-    const strCased = str.toLowerCase();
-
-    for (let key in EventType) {
-        if(strCased === key) return EventType[<EventType>key];
-    }
-
-    return EventType.type;
-}
-
-function parseEventDelay(str: string | undefined): number {
-    const delay = Number(str)
-
-    return isNaN(delay) ? 60 + Math.floor(Math.random() * 20) : delay;
-}
-
-function strToEvent(str: string): IEvent {
-    const strArr = str.trim().split(' ');
+    const cmd = parseCommandKeyString(strArr[0]);
+    const params = strArr.splice(1);
 
     const ret = {
-        key: parseEventKey(strArr[0]),
-        type: parseEventType(strArr[1]),
-        delay: parseEventDelay(strArr[2])
+        command: cmd,
+        params: params,
+        handler: getHandlerFromCommand(cmd)
     }
 
-    console.log(ret) // todo remove
+    console.log(ret)
 
     return ret;
 }
@@ -59,15 +30,15 @@ function stringToEvents(str: string): Array<IEvent> {
     return str
         .split('\n')
         .map(strToEvent)
-        .filter(event => event.key !== null);
+        .filter(event => event !== null);
 }
 
-async function handleEvent(input: IEvent) {
-    return
+async function createEventHandler(event: IEvent) {
+    if(event.handler === E)
 }
 
 async function handleInput(input: string) {
-    return stringToEvents(input).forEach(handleEvent);
+    return stringToEvents(input).forEach(createEventHandler);
 }
 
 export { handleInput }
@@ -76,10 +47,13 @@ export { handleInput }
 (
     function(){
     const test = `
-    p press 1000
+    p press
     a type
     p release
+    delay 1000
     `
         handleInput(test) // todo remove
     }()
 );
+
+
