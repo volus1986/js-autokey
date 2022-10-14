@@ -1,5 +1,5 @@
 import { IEventHandler } from "./i-event-handler";
-import {Key} from "@nut-tree/nut-js";
+import {Key, keyboard, KeyboardClass} from "@nut-tree/nut-js";
 
 export const KeyAction = {
     press: 'press',
@@ -12,14 +12,16 @@ export class KeyboardEvent implements IEventHandler {
     actionInputted: string;
     keyCode: number | null;
     action: string | null;
+    delay: number
 
-    constructor(key: string, action: string) {
+    constructor(key: string, action: string, delayAfter?: string) {
         this.keyInputted = key;
         this.actionInputted = action
         // @ts-ignore
         this.keyCode = Key[key] || null;
         // @ts-ignore
         this.action = KeyAction[action];
+        this.delay = Number(delayAfter) || 0
 
         this.init()
     }
@@ -41,12 +43,11 @@ export class KeyboardEvent implements IEventHandler {
                 break
             default:
                 this.handleEvent = this.handleIncorrectAction
-
         }
     }
 
     toString() {
-        console.log(`key event: key: ${this.keyInputted} | actionInputted: ${this.actionInputted} | keyCode: ${this.keyCode}| action: ${this.action}`)
+        console.log(`key event: key: ${this.keyInputted} | actionInputted: ${this.actionInputted} | keyCode: ${this.keyCode}| action: ${this.action} | delay: ${this.delay}`)
     }
 
     async handleIncorrectAction(): Promise<any> {
@@ -56,19 +57,30 @@ export class KeyboardEvent implements IEventHandler {
                 resolve()
             }, 0);
         })
-
     }
 
-    async handleKeyPressEvent(): Promise<any> {
-        return this.handleIncorrectAction();
+    async handleAfterClick(): Promise<any> {
+        if (this.delay) {
+            await new Promise(resolve => setTimeout(resolve, this.delay))
+        }
+
+        return
+    }
+
+    async handleKeyPressEvent(): Promise<KeyboardClass> {
+        const res = await keyboard.pressKey(this.keyCode);
+
+        if(this.delay) await this.handleAfterClick();
+
+        return res
     }
 
     async handleKeyReleaseEvent(): Promise<any> {
-        return this.handleIncorrectAction();
+        return keyboard.releaseKey(this.keyCode);
     }
 
     async handleKeyTypeEvent(): Promise<any> {
-        return this.handleIncorrectAction();
+        return keyboard.type(this.keyCode);
     }
 
     async handleEvent(): Promise<any> {}

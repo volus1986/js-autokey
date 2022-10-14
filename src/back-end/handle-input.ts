@@ -38,7 +38,7 @@ function stringToEvents(str: string): Array<IEvent> {
 
 function createEventHandler(event: IEvent): IEventHandler {
     if(event.type === EventTypes.delay) return new DelayEvent(event.params[0]);
-    else return new KeyboardEvent(event.command, event.params[0])
+    else return new KeyboardEvent(event.command, event.params[0], event.params[1])
 }
 
 function convertInputToCommands(input: string): Array<IEventHandler> {
