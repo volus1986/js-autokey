@@ -4,11 +4,12 @@ export enum EventTypes {
 }
 
 export interface IEvent {
-    handler: EventTypes,
+    type: EventTypes,
     command: string,
     params: string[],
 }
 
 export interface IEventHandler {
-    handleEvent(event: IEvent): Promise<any>;
+    isCompiledSuccess(): boolean;
+    handleEvent(): Promise<any>;
 }

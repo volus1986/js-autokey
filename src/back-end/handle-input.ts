@@ -1,7 +1,10 @@
-import {parseCommandKeyString, COMMANDS} from "./events/command";
-import {EventTypes, IEvent} from "./events/i-event-handler";
+import {COMMANDS, parseCommandKeyString} from "./events/command";
+import {EventTypes, IEvent, IEventHandler} from "./events/i-event-handler";
+import {DelayEvent} from "./events/delay-event";
+import {KeyboardEvent} from "./events/keyboard-event";
+import {Key} from "@nut-tree/nut-js";
 
-function getHandlerFromCommand(command: string) {
+function getEventTypeFromCommand(command: string) {
     if (command === COMMANDS.delay) return EventTypes.delay;
     else return EventTypes.keyboard;
 }
@@ -18,7 +21,7 @@ function strToEvent(str: string): IEvent | null {
     const ret = {
         command: cmd,
         params: params,
-        handler: getHandlerFromCommand(cmd)
+        type: getEventTypeFromCommand(cmd)
     }
 
     console.log(ret)
@@ -33,26 +36,39 @@ function stringToEvents(str: string): Array<IEvent> {
         .filter(event => event !== null);
 }
 
-async function createEventHandler(event: IEvent) {
-    if(event.handler === E)
+function createEventHandler(event: IEvent): IEventHandler {
+    if(event.type === EventTypes.delay) return new DelayEvent(event.params[0]);
+    else return new KeyboardEvent(event.command, event.params[0])
 }
 
-async function handleInput(input: string) {
-    return stringToEvents(input).forEach(createEventHandler);
+function convertInputToCommands(input: string): Array<IEventHandler> {
+
+    return stringToEvents(input).map(createEventHandler);
 }
 
-export { handleInput }
+export { convertInputToCommands }
 
 // todo remove
 (
-    function(){
+    async function(){
     const test = `
     p press
     a type
-    p release
     delay 1000
+    p release
     `
-        handleInput(test) // todo remove
+        const commands = convertInputToCommands(test) // todo remove
+        for (const cmd of commands) {
+            if (!cmd.isCompiledSuccess()) {
+                console.error('Command not compiled' + JSON.stringify(cmd));
+
+                return;
+            }
+        }
+
+        for (const cmd of commands) {
+            await cmd.handleEvent()
+        }
     }()
 );
 

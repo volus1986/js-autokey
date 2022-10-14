@@ -5,12 +5,6 @@ export const COMMANDS = {
     delay: 'delay'
 };
 
-export const COMMAND_PARAMS = {
-    press: 'press',
-    release: 'release',
-    type: 'type',
-}
-
 export function convertToCommandKey(commandStr: string, commandList: Object): string | null {
     if (!commandStr.length) return null;
 
@@ -30,8 +24,4 @@ export function convertToCommandKey(commandStr: string, commandList: Object): st
 
 export function parseCommandKeyString(actionStr: string): string | null {
     return convertToCommandKey(actionStr, COMMANDS);
-}
-
-export function parseCommandParamString(actionStr: string): string | null {
-    return convertToCommandKey(actionStr, COMMAND_PARAMS);
 }
