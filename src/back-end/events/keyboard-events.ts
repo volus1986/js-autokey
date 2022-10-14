@@ -1,7 +1,4 @@
-// const {keyboard, Key} = require("@nut-tree/nut-js");
 import {keyboard, Key} from "@nut-tree/nut-js"
-
-const keys = Object.keys(Key)
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
