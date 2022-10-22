@@ -1,10 +1,15 @@
 import * as React from "react";
-import {Button} from "@material-ui/core";
 import styled from 'styled-components';
 import { createRoot } from 'react-dom/client';
+import Header from './components/header'
+import Footer from "./components/footer";
+import Body from "./components/body/body";
 
-const CustomButtonContainer = styled.div`
+const RootContainer = styled.div`
   background-color: green;
+  
+  display: grid;
+  width: 100%;
   
   @media (max-width: 1000px) {
     background-color: blue;
@@ -13,15 +18,11 @@ const CustomButtonContainer = styled.div`
 
 const App = () => {
     return (
-        <div>
-            <h1>
-                Welcome to React App that build using Webpack and Babel separately
-            </h1>
-            <CustomButtonContainer>
-                <Button>MUI button 2</Button>
-            </CustomButtonContainer>
-
-        </div>
+        <RootContainer>
+            <Header></Header>
+            <Body></Body>
+            <Footer></Footer>
+        </RootContainer>
     )
 }
 
