@@ -6,10 +6,10 @@ import Footer from "./components/footer";
 import Body from "./components/body/body";
 
 const RootContainer = styled.div`
-  background-color: green;
-  
   display: grid;
   width: 100%;
+  padding: 2px;
+  background-color: green;
   
   @media (max-width: 1000px) {
     background-color: blue;
