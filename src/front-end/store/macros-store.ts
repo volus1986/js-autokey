@@ -8,7 +8,7 @@ class ObservableMacrosStore {
     constructor() {
         makeObservable(this, {
             macrosList: observable,
-            // pendingRequests: observable, change for test commit
+            // pendingRequests: observable,
             report: computed,
             addMacros: action,
         });
